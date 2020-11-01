@@ -24,11 +24,32 @@
     </header>
     <div class="container">
       <!-- Timeblocks go here -->
+ 
     </div>
 
     <script type="text/javascript">
+
+      //Use moment.js to display date on screen
       var m = moment();
       var displayDate = $("#currentDay").text(m.format("dddd, MMMM Do"));
+
+      //Use the array to dynamically create timeblocks on the screen.
+      var time = ["9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM"];
+
+      //Create a for-loop to iterate through the time array.
+      for (var i = 0; i < 9; i++) {
+        //Create a variable named "timeblock" equal to $("<div>")
+        var timeblock = $("<div>");
+        //Then give each "timeblock" the following classes: "time-block" "description"
+        timeblock.addClass("time-block description");
+        //Then give each "timeblock" a data-attribute called "data-time"
+        timeblock.attr("data-time", time[i]);
+        //Then give each "timeblock" a text equal to "time[i]".
+        timeblock.text(time[i]);
+        //Finally, append each "timeblock" to the ".container" div
+        $(".container").append(timeblock);
+      }
+
 
     </script>
 
