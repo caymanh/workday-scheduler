@@ -70,8 +70,9 @@ textarea{
   transition: all .3s ease-in-out;
 }
 
-.saveIcon {
-  height: 1.5rem;
-  width: 1.5rem;
-  margin-top: 1.7rem;
+.fa-save {
+  height: 3.0rem;
+  width: 3.0rem;
+  margin-top: 1.9rem;
 }
+
