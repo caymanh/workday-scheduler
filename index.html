@@ -10,8 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
 
     <title>Work Day Scheduler</title>
   </head>
@@ -23,55 +22,15 @@
       <p id="currentDay" class="lead"></p>
     </header>
     <div class="container">
-      <!-- Timeblocks go here -->
+      
  
     </div>
 
-    <script type="text/javascript">
-
-      //Use moment.js to display date on screen
-      var m = moment();
-      var displayDate = $("#currentDay").text(m.format("dddd, MMMM Do"));
-
-      //Use the array to dynamically create timeblocks on the screen.
-      var time = ["9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM"];
-
-      for (var i = 0; i < 9; i++) {
-        //Create a variable named "newRow" equal to $("<div>")
-        var newRow = $("<div>");
-        //Then give each "newRow" the following class: "row" 
-        newRow.addClass("row time-block");
-        //Then give each "newRow" a data-attribute called "data-time"
-        // newRow.attr("data-time", time[i]);
-        //Then give each "newRow" a text equal to "time[i]".
-        // newRow.text(time[i]);
-        //Finally, append each "newRow" to the ".container" div
-        $(".container").append(newRow);
-      }
-
-      //Created a column to display time of day
-      var timeCol = $("<div>");
-      timeCol.addClass("col-1 hour");
-      $(".row").append(timeCol);
-
-      //Created a column to input event
-      var eventCol = $("<textarea>");
-      eventCol.addClass("col-10");
-      $(".row").append(eventCol);
-
-      //Created a column to save event
-      var saveBtnCol = $("<div>");
-      saveBtnCol.addClass("col-1 saveBtn");
-      $(".row").append(saveBtnCol);
-
-      //Append the save icon to saveBtnCol
-      $('.saveBtn').append('<i class="far fa-save"></i>');
 
 
 
-    </script>
-
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src ="./js/script.js"></script>
   </body>
 </html>
