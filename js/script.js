@@ -28,7 +28,9 @@ $(document).ready(function () {
       //Give each "eventCol" a data-attribute called "data-time"
       eventCol.attr("data-time", time[i]);
 
-      //insert setBackground function
+      //Change the background of eventCol based on time of the day
+    //   var currentTime = m.format("H");
+    //   setBackground(eventCol, currentTime, displayTime);
 
       //Append save icon to saveBtnCol
       var saveBtnCol = $("<div>")
@@ -40,20 +42,26 @@ $(document).ready(function () {
 
       //Append newRow to container
       $(".container").append(newRow);
+
+
     }
   }
 
   setTimeBlock();
 
-  //Function to change background color of input event text area
-  //     function setBackgroundColor(){
-  //         var currentTime = m.format("H");
-  //         return time[i];
-  // }
-  //     console.log(setBackgroundColor());
+  //Change the background of eventCol based on time of the day
+//   function setBackground(eventCol, currentTime, displayTime) {
+//     var scheduleTime = displayTime.text;
+//     return scheduleTime;
+//   }
+
+//   console.log(setBackground());
+
+
+//Create an "on-click" event attached to the ".saveBtn" class.
+$('.saveBtn').on("click", function() {
+    var task = eventCol.val();
+    console.log(task);
 });
 
-//   //Create an "on-click" event attached to the ".saveBtn" class.
-//   $('.saveBtn').on("click", function() {
-//     console.log("clicked");
-//   })
+})
