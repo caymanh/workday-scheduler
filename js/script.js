@@ -1,36 +1,76 @@
 $(document).ready(function () {
-    
+  var text_hour = 9;
+  var timeSuffix = ":00am";
+
   //Use moment.js to display date on screen
   var m = moment();
   $("#currentDay").text(m.format("dddd, MMMM Do"));
 
+  function setBackground(eventCol, currentTime, showTime)
+{
+    var iTime_CUR = currentTime.split("");
+    var iTime_TXT = showTime.split("");
+
+    if(iTime_CUR[iTime_CUR.length - 2] !== iTime_TXT[iTime_TXT.length - 2])
+    {
+        if(iTime_CUR[iTime_CUR.length - 2] > iTime_TXT[iTime_TXT.length - 2])
+        {
+            eventCol.addClass("past");
+        }
+        else
+        {
+            eventCol.addClass("bg-primary");
+        }
+    }
+    else
+    {
+        var t_CUR = parseHour(iTime_CUR);
+        var t_TXT = parseHour(iTime_TXT);
+
+        if(parseInt(t_CUR) > parseInt(t_TXT))
+        {
+            eventCol.addClass("past");
+        }
+        else if(parseInt(t_CUR) < parseInt(t_TXT))
+        {
+            if(parseInt(t_TXT) === 12)
+            {
+                eventCol.addClass("past");
+            }
+            else
+            {
+                eventCol.addClass("bg-primary");
+            }
+        }
+        else
+        {
+            eventCol.addClass("bg-warning");
+        }
+    }
+}
+
   //Function to generate timeblock
   function setTimeBlock() {
+    var currentTime = getCurrentHour("LT");
+
     for (var i = 0; i < 9; i++) {
       //Create a variable named "newRow" equal to $("<div>") and add the classes "row" and "time-block"
       var newRow = $("<div>").addClass("row time-block");
 
-      var time = ["9", "10", "11", "12", "13", "14", "15", "16", "17"];
-
-      //Give each "variable a text equal to "time[i]".
-      var displayTime = $("<h5>").addClass("hour");
-      if (time[i] < 10) {
-        displayTime.text("0" + time[i] + ":00");
-      } else {
-        displayTime.text(time[i] + ":00");
-      }
+      var showTime = text_hour + timeSuffix;
+      var displayTime = $("<p>").addClass("hour").text(showTime);
 
       //Append displayTime to timeCol
       var timeCol = $("<div>").addClass("col-1").append(displayTime);
 
-      var eventCol = $("<textarea>").addClass("col-10");
-
       //Give each "eventCol" a data-attribute called "data-time"
-      eventCol.attr("data-time", time[i]);
+      var eventCol = $("<textarea>")
+        .addClass("col-10")
+        .text("")
+        .attr("id", showTime);
 
       //Change the background of eventCol based on time of the day
-    //   var currentTime = m.format("H");
-    //   setBackground(eventCol, currentTime, displayTime);
+        setBackground(eventCol, currentTime, showTime);
 
       //Append save icon to saveBtnCol
       var saveBtnCol = $("<div>")
@@ -43,25 +83,54 @@ $(document).ready(function () {
       //Append newRow to container
       $(".container").append(newRow);
 
-
+      incrementTextHour();
     }
+  }
+
+  function incrementTextHour() {
+    if (text_hour === 12) {
+      text_hour = 1;
+    } else if (text_hour === 11) {
+      timeSuffix = ":00pm";
+      text_hour++;
+    } else {
+      text_hour++;
+    }
+  }
+
+  function getCurrentHour(pFormat) {
+    var time = moment().format(pFormat).toLowerCase();
+
+    time = time.split("");
+
+    var suffix = "";
+
+    var hour = parseHour(time);
+
+    console.log(hour);
+
+    if (time[time.length - 2] === "p") {
+      suffix = ":00pm";
+    } else {
+      suffix = ":00am";
+    }
+
+    return hour + suffix;
+  }
+
+  function parseHour(pTime) {
+    var i = 0;
+    var iHour = "";
+
+    while (pTime[i] !== ":" || i > 100) {
+      iHour += pTime[i];
+      i++;
+    }
+
+    return iHour;
   }
 
   setTimeBlock();
 
-  //Change the background of eventCol based on time of the day
-//   function setBackground(eventCol, currentTime, displayTime) {
-//     var scheduleTime = displayTime.text;
-//     return scheduleTime;
-//   }
-
-//   console.log(setBackground());
-
-
-//Create an "on-click" event attached to the ".saveBtn" class.
-$('.saveBtn').on("click", function() {
-    var task = eventCol.val();
-    console.log(task);
+  
 });
-
-})
