@@ -10,48 +10,33 @@ $(document).ready(function () {
   $("#currentDay").text(m.format("dddd, MMMM Do"));
 
   //Function to change background color of time-block depending on hour of the day
-  function setBackground(eventCol, currentTime, showTime)
-{
+  function setBackground(eventCol, currentTime, showTime) {
     var iTime_CUR = currentTime.split("");
     var iTime_TXT = showTime.split("");
 
-    if(iTime_CUR[iTime_CUR.length - 2] !== iTime_TXT[iTime_TXT.length - 2])
-    {
-        if(iTime_CUR[iTime_CUR.length - 2] > iTime_TXT[iTime_TXT.length - 2])
-        {
-            eventCol.addClass("past");
-        }
-        else
-        {
-            eventCol.addClass("future");
-        }
-    }
-    else
-    {
-        var t_CUR = parseHour(iTime_CUR);
-        var t_TXT = parseHour(iTime_TXT);
+    if (iTime_CUR[iTime_CUR.length - 2] !== iTime_TXT[iTime_TXT.length - 2]) {
+      if (iTime_CUR[iTime_CUR.length - 2] > iTime_TXT[iTime_TXT.length - 2]) {
+        eventCol.addClass("past");
+      } else {
+        eventCol.addClass("future");
+      }
+    } else {
+      var t_CUR = parseHour(iTime_CUR);
+      var t_TXT = parseHour(iTime_TXT);
 
-        if(parseInt(t_CUR) > parseInt(t_TXT))
-        {
-            eventCol.addClass("past");
+      if (parseInt(t_CUR) > parseInt(t_TXT)) {
+        eventCol.addClass("past");
+      } else if (parseInt(t_CUR) < parseInt(t_TXT)) {
+        if (parseInt(t_TXT) === 12) {
+          eventCol.addClass("past");
+        } else {
+          eventCol.addClass("future");
         }
-        else if(parseInt(t_CUR) < parseInt(t_TXT))
-        {
-            if(parseInt(t_TXT) === 12)
-            {
-                eventCol.addClass("past");
-            }
-            else
-            {
-                eventCol.addClass("future");
-            }
-        }
-        else
-        {
-            eventCol.addClass("present");
-        }
+      } else {
+        eventCol.addClass("present");
+      }
     }
-}
+  }
 
   //Function to generate timeblock
   function setTimeBlock() {
@@ -74,7 +59,7 @@ $(document).ready(function () {
         .attr("id", showTime);
 
       //Change the background of eventCol based on time of the day
-        setBackground(eventCol, currentTime, showTime);
+      setBackground(eventCol, currentTime, showTime);
 
       //Append save icon to saveBtnCol
       var saveBtnCol = $("<div>")
@@ -132,59 +117,46 @@ $(document).ready(function () {
     return iHour;
   }
 
-  function AlterStoredBlocks(pText, pID)
-  {
-      nBlock = {
-          id : pID,
-          input : pText.trim()
+  function AlterStoredBlocks(pText, pID) {
+    nBlock = {
+      id: pID,
+      input: pText.trim(),
+    };
+
+    for (var i = 0; i < storedBlocks.length; i++) {
+      if (storedBlocks[i].id === nBlock.id) {
+        storedBlocks.splice(i, 1);
+
+        localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
+
+        return null;
       }
-  
-      for(var i = 0; i < storedBlocks.length; i++)
-      {
-          if(storedBlocks[i].id === nBlock.id)
-          {
-              storedBlocks.splice(i, 1);
-  
-              localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
-  
-              return null;
-          }
-      }
-  
-      storedBlocks.push(nBlock);
-  
-      localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
-  }
-  
-  
-  function GetStoredBlocks()
-  {
-  
-      if(localStorage.getItem(storedBlocks_NAME))
-      {
-          storedBlocks = JSON.parse(localStorage.getItem(storedBlocks_NAME));
-  
-          storedBlocks.forEach(iBlock => {
-             
-              iID = "#" + iBlock.id;
-  
-              newRow = $(document.getElementById(iBlock.id));
-  
-              newRow.val(iBlock.input);
-  
-  
-          });
-  
-      }
-  
+    }
+
+    storedBlocks.push(nBlock);
+
+    localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
   }
 
+  function GetStoredBlocks() {
+    if (localStorage.getItem(storedBlocks_NAME)) {
+      storedBlocks = JSON.parse(localStorage.getItem(storedBlocks_NAME));
+
+      storedBlocks.forEach((iBlock) => {
+        iID = "#" + iBlock.id;
+
+        newRow = $(document.getElementById(iBlock.id));
+
+        newRow.val(iBlock.input);
+      });
+    }
+  }
 
   setTimeBlock();
   GetStoredBlocks();
 
-  $(".saveBtn").click(function() {
-   
+  //Store task in local storage upon clicking the "save button"
+  $(".saveBtn").click(function () {
     $iTextArea = $($(this).parent().children()[1]);
 
     iInput = $iTextArea.val();
@@ -192,6 +164,4 @@ $(document).ready(function () {
 
     AlterStoredBlocks(iInput, iID);
   });
-
-  
 });
