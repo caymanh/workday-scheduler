@@ -5,7 +5,7 @@ Workday Scheduler is a simple calendar application that allows a user to save ev
 ## Mockup
 
 <p align="center">
-  <img alt="workday-scheduler" src="https://github.com/caymanh/coding-quiz/blob/main/images/app-screenshot.JPG">
+  <img alt="workday-scheduler" src="https://github.com/caymanh/workday-scheduler/blob/main/image/05-third-party-apis-homework-demo.gif">
 </p>
 
 
