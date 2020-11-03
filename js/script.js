@@ -2,10 +2,14 @@ $(document).ready(function () {
   var text_hour = 9;
   var timeSuffix = ":00am";
 
+  var Task = [];
+  var Task_NAME = "Task";
+
   //Use moment.js to display date on screen
   var m = moment();
   $("#currentDay").text(m.format("dddd, MMMM Do"));
 
+  //Function to change background color of time-block depending on hour of the day
   function setBackground(eventCol, currentTime, showTime)
 {
     var iTime_CUR = currentTime.split("");
@@ -19,7 +23,7 @@ $(document).ready(function () {
         }
         else
         {
-            eventCol.addClass("bg-primary");
+            eventCol.addClass("future");
         }
     }
     else
@@ -39,12 +43,12 @@ $(document).ready(function () {
             }
             else
             {
-                eventCol.addClass("bg-primary");
+                eventCol.addClass("future");
             }
         }
         else
         {
-            eventCol.addClass("bg-warning");
+            eventCol.addClass("present");
         }
     }
 }
@@ -107,8 +111,6 @@ $(document).ready(function () {
 
     var hour = parseHour(time);
 
-    console.log(hour);
-
     if (time[time.length - 2] === "p") {
       suffix = ":00pm";
     } else {
@@ -130,7 +132,68 @@ $(document).ready(function () {
     return iHour;
   }
 
+  function AlterStoredBlocks(pText, pID)
+{
+    nBlock = {
+        id : pID,
+        input : pText.trim()
+    }
+
+    for(var i = 0; i < task.length; i++)
+    {
+        if(task[i].id === nBlock.id)
+        {
+            task.splice(i, 1);
+
+            localStorage.setItem(task_NAME, JSON.stringify(task));
+
+            return null;
+        }
+    }
+
+    storedBlocks.push(nBlock);
+
+    localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
+}
+
+
+  //Function to store tasks
+  function StoredTask(pText, pID)
+{
+    nBlock = {
+        id : pID,
+        input : pText.trim()
+    }
+
+    for(var i = 0; i < task.length; i++)
+    {
+        if(task[i].id === nBlock.id)
+        {
+            task.splice(i, 1);
+
+            localStorage.setItem(task_NAME, JSON.stringify(task));
+
+            return null;
+        }
+    }
+
+    task.push(nBlock);
+
+    localStorage.setItem(task_NAME, JSON.stringify(task));
+}
+
+$(".saveBtn").click(function() {
+
+    eventCol = $($(this).parent().parent().children()[1]);
+
+    iInput = eventCol.val();
+    iID = eventCol.attr("id");
+
+    AlterStoredBlocks(iInput, iID);
+  });
+
   setTimeBlock();
+  StoredTask();
 
   
 });
