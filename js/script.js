@@ -2,8 +2,8 @@ $(document).ready(function () {
   var text_hour = 9;
   var timeSuffix = ":00am";
 
-  var Task = [];
-  var Task_NAME = "Task";
+  var storedBlocks = [];
+  var storedBlocks_NAME = "Stored Blocks";
 
   //Use moment.js to display date on screen
   var m = moment();
@@ -133,67 +133,65 @@ $(document).ready(function () {
   }
 
   function AlterStoredBlocks(pText, pID)
-{
-    nBlock = {
-        id : pID,
-        input : pText.trim()
-    }
+  {
+      nBlock = {
+          id : pID,
+          input : pText.trim()
+      }
+  
+      for(var i = 0; i < storedBlocks.length; i++)
+      {
+          if(storedBlocks[i].id === nBlock.id)
+          {
+              storedBlocks.splice(i, 1);
+  
+              localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
+  
+              return null;
+          }
+      }
+  
+      storedBlocks.push(nBlock);
+  
+      localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
+  }
+  
+  
+  function GetStoredBlocks()
+  {
+  
+      if(localStorage.getItem(storedBlocks_NAME))
+      {
+          storedBlocks = JSON.parse(localStorage.getItem(storedBlocks_NAME));
+  
+          storedBlocks.forEach(iBlock => {
+             
+              iID = "#" + iBlock.id;
+  
+              newRow = $(document.getElementById(iBlock.id));
+  
+              newRow.val(iBlock.input);
+  
+  
+          });
+  
+      }
+  
+  }
 
-    for(var i = 0; i < task.length; i++)
-    {
-        if(task[i].id === nBlock.id)
-        {
-            task.splice(i, 1);
 
-            localStorage.setItem(task_NAME, JSON.stringify(task));
+  setTimeBlock();
+  GetStoredBlocks();
 
-            return null;
-        }
-    }
+  $(".saveBtn").click(function() {
+   
+    $iTextArea = $($(this).parent().children()[1]);
 
-    storedBlocks.push(nBlock);
-
-    localStorage.setItem(storedBlocks_NAME, JSON.stringify(storedBlocks));
-}
-
-
-  //Function to store tasks
-  function StoredTask(pText, pID)
-{
-    nBlock = {
-        id : pID,
-        input : pText.trim()
-    }
-
-    for(var i = 0; i < task.length; i++)
-    {
-        if(task[i].id === nBlock.id)
-        {
-            task.splice(i, 1);
-
-            localStorage.setItem(task_NAME, JSON.stringify(task));
-
-            return null;
-        }
-    }
-
-    task.push(nBlock);
-
-    localStorage.setItem(task_NAME, JSON.stringify(task));
-}
-
-$(".saveBtn").click(function() {
-
-    eventCol = $($(this).parent().parent().children()[1]);
-
-    iInput = eventCol.val();
-    iID = eventCol.attr("id");
+    iInput = $iTextArea.val();
+    iID = $iTextArea.attr("id");
 
     AlterStoredBlocks(iInput, iID);
   });
-
-  setTimeBlock();
-  StoredTask();
 
   
 });
